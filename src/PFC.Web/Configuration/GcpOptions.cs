@@ -13,4 +13,6 @@ public class GcpOptions
     public string Location { get; set; } = string.Empty;
 
     public string SigningCredentialPath { get; set; } = string.Empty;
+
+    public string MenuUploadsPubSubTopic { get; set; } = "menu-uploads-topic";
 }

@@ -183,6 +183,22 @@
           }
         }
       },
+      "Google.Cloud.Iam.V1/3.5.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "[4.12.1, 5.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Cloud.Iam.V1.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Cloud.Iam.V1.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Google.Cloud.Location/2.4.0": {
         "type": "package",
         "dependencies": {
@@ -195,6 +211,23 @@
         },
         "runtime": {
           "lib/netstandard2.0/Google.Cloud.Location.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Google.Cloud.PubSub.V1/3.33.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "[4.13.1, 5.0.0)",
+          "Google.Cloud.Iam.V1": "[3.5.0, 4.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Cloud.PubSub.V1.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Cloud.PubSub.V1.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -717,6 +750,25 @@
         "lib/netstandard2.0/Google.Cloud.Firestore.V1.xml"
       ]
     },
+    "Google.Cloud.Iam.V1/3.5.0": {
+      "sha512": "CTLBAQ7WxsLoA4lovpvhF4MRUJH64smrIjuD/0jDrLs6zpbpf+f8Ur8ekRKv67kwlpN6Ug0q7EuT2csWDEczlQ==",
+      "type": "package",
+      "path": "google.cloud.iam.v1/3.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.cloud.iam.v1.3.5.0.nupkg.sha512",
+        "google.cloud.iam.v1.nuspec",
+        "lib/net462/Google.Cloud.Iam.V1.dll",
+        "lib/net462/Google.Cloud.Iam.V1.pdb",
+        "lib/net462/Google.Cloud.Iam.V1.xml",
+        "lib/netstandard2.0/Google.Cloud.Iam.V1.dll",
+        "lib/netstandard2.0/Google.Cloud.Iam.V1.pdb",
+        "lib/netstandard2.0/Google.Cloud.Iam.V1.xml"
+      ]
+    },
     "Google.Cloud.Location/2.4.0": {
       "sha512": "ZFChsp6OYVPBAzpoEWFMf/W9lfOgPj5BY+75/VjGV6EoirhA3YNlSKta3fX2MPaWH6RqJ9ZtNJT4vmdxhxbkbQ==",
       "type": "package",
@@ -734,6 +786,25 @@
         "lib/netstandard2.0/Google.Cloud.Location.dll",
         "lib/netstandard2.0/Google.Cloud.Location.pdb",
         "lib/netstandard2.0/Google.Cloud.Location.xml"
+      ]
+    },
+    "Google.Cloud.PubSub.V1/3.33.0": {
+      "sha512": "3Bacs+X/QHkxIJzdn1Q+0fGIeKFg9wrxokEMI/9/8KctFdmMV76eO8gTOPjZbpNeEa1zSG55HzwwJCF1nstVZw==",
+      "type": "package",
+      "path": "google.cloud.pubsub.v1/3.33.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.cloud.pubsub.v1.3.33.0.nupkg.sha512",
+        "google.cloud.pubsub.v1.nuspec",
+        "lib/net462/Google.Cloud.PubSub.V1.dll",
+        "lib/net462/Google.Cloud.PubSub.V1.pdb",
+        "lib/net462/Google.Cloud.PubSub.V1.xml",
+        "lib/netstandard2.0/Google.Cloud.PubSub.V1.dll",
+        "lib/netstandard2.0/Google.Cloud.PubSub.V1.pdb",
+        "lib/netstandard2.0/Google.Cloud.PubSub.V1.xml"
       ]
     },
     "Google.Cloud.Storage.V1/4.14.0": {
@@ -1169,6 +1240,7 @@
   "projectFileDependencyGroups": {
     "net8.0": [
       "Google.Cloud.Firestore >= 4.2.0",
+      "Google.Cloud.PubSub.V1 >= 3.33.0",
       "Google.Cloud.Storage.V1 >= 4.14.0"
     ]
   },
@@ -1225,6 +1297,10 @@
           "Google.Cloud.Firestore": {
             "target": "Package",
             "version": "[4.2.0, )"
+          },
+          "Google.Cloud.PubSub.V1": {
+            "target": "Package",
+            "version": "[3.33.0, )"
           },
           "Google.Cloud.Storage.V1": {
             "target": "Package",

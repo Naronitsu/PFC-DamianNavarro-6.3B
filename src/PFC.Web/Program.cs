@@ -1,8 +1,10 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
+using Google.Cloud.PubSub.V1;
 using Google.Cloud.Storage.V1;
 using Microsoft.Extensions.Options;
 using PFC.Web.Configuration;
+using PFC.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +33,26 @@ builder.Services.AddSingleton(sp =>
     var gcp = sp.GetRequiredService<IOptions<GcpOptions>>().Value;
     if (!string.IsNullOrWhiteSpace(gcp.SigningCredentialPath))
         return UrlSigner.FromCredential(CredentialFactory.FromFile<ServiceAccountCredential>(gcp.SigningCredentialPath));
-    return UrlSigner.FromCredential(GoogleCredential.GetApplicationDefault());
+
+    var adc = GoogleCredential.GetApplicationDefault();
+    if (adc.UnderlyingCredential is UserCredential)
+        throw new InvalidOperationException(
+            "Gcp:SigningCredentialPath must point to a service account JSON key file. User credentials from \"gcloud auth application-default login\" cannot sign GCS URLs.");
+
+    return UrlSigner.FromCredential(adc);
 });
+
+builder.Services.AddSingleton(sp =>
+{
+    var gcp = sp.GetRequiredService<IOptions<GcpOptions>>().Value;
+    var topicId = string.IsNullOrWhiteSpace(gcp.MenuUploadsPubSubTopic)
+        ? "menu-uploads-topic"
+        : gcp.MenuUploadsPubSubTopic;
+    var topicName = TopicName.FromProjectTopic(gcp.ProjectId, topicId);
+    return PublisherClient.Create(topicName);
+});
+
+builder.Services.AddSingleton<MenuUploadNotificationService>();
 
 builder.Services.AddControllersWithViews();
 

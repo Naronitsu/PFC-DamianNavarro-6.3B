@@ -56,3 +56,6 @@ C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\refint\PFC.Web.dll
 C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\PFC.Web.pdb
 C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\PFC.Web.genruntimeconfig.cache
 C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\ref\PFC.Web.dll
+C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\PFC.Web.sourcelink.json
+C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.Iam.V1.dll
+C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.PubSub.V1.dll

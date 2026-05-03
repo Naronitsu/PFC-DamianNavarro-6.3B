@@ -6,6 +6,20 @@
 
 <p class="text-muted">Files upload straight to your bucket; progress is per file.</p>
 
+<input type="hidden" id="restaurantId" value="@ViewBag.RestaurantId" />
+<input type="hidden" id="menuId" value="@ViewBag.MenuId" />
+
+<div class="row mb-3">
+    <div class="col-md-6">
+        <label class="form-label" for="restaurantName">Restaurant name</label>
+        <input type="text" id="restaurantName" class="form-control" value="My restaurant" />
+    </div>
+    <div class="col-md-6">
+        <label class="form-label" for="menuTitle">Menu</label>
+        <input type="text" id="menuTitle" class="form-control" value="Main menu" />
+    </div>
+</div>
+
 <input type="file" id="files" multiple accept="image/*" class="form-control mb-3" />
 <button type="button" id="start" class="btn btn-primary" disabled>Upload</button>
 
@@ -25,6 +39,11 @@
     start.addEventListener('click', async () => {
         progressList.innerHTML = '';
         const files = Array.from(input.files || []);
+        const rid = document.getElementById('restaurantId').value;
+        const mid = document.getElementById('menuId').value;
+        const rname = document.getElementById('restaurantName').value || 'Restaurant';
+        const mtitle = document.getElementById('menuTitle').value || 'Menu';
+
         for (const file of files) {
             const li = document.createElement('li');
             li.className = 'mb-2';
@@ -44,33 +63,70 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ fileName: file.name, contentType: file.type || 'application/octet-stream' })
             });
+            const signText = await signRes.text();
             if (!signRes.ok) {
-                status.textContent = ' failed (sign)';
+                status.textContent = ' sign ' + signRes.status + ' ' + signText.slice(0, 280);
                 continue;
             }
-            const { uploadUrl } = await signRes.json();
+            let signJson;
+            try {
+                signJson = JSON.parse(signText);
+            } catch {
+                status.textContent = ' sign not JSON (server error?) ' + signText.slice(0, 200);
+                continue;
+            }
+            const uploadUrl = signJson.uploadUrl;
+            const objectName = signJson.objectName;
+            if (!uploadUrl || !objectName) {
+                status.textContent = ' sign response missing url';
+                continue;
+            }
 
-            await new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.open('PUT', uploadUrl);
-                xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
-                xhr.upload.onprogress = (e) => {
-                    if (e.lengthComputable)
-                        bar.value = Math.round((e.loaded / e.total) * 100);
-                };
-                xhr.onload = () => {
-                    if (xhr.status >= 200 && xhr.status < 300) {
-                        bar.value = 100;
-                        status.textContent = ' done';
-                        resolve();
-                    } else {
-                        status.textContent = ' failed (' + xhr.status + ')';
-                        reject(new Error(xhr.statusText));
-                    }
-                };
-                xhr.onerror = () => { status.textContent = ' network error'; reject(new Error('network')); };
-                xhr.send(file);
-            }).catch(() => {});
+            try {
+                await new Promise((resolve, reject) => {
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('PUT', uploadUrl);
+                    xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+                    xhr.upload.onprogress = (e) => {
+                        if (e.lengthComputable)
+                            bar.value = Math.round((e.loaded / e.total) * 100);
+                    };
+                    xhr.onload = () => {
+                        if (xhr.status >= 200 && xhr.status < 300) {
+                            bar.value = 100;
+                            resolve();
+                        } else {
+                            const err = (xhr.responseText && xhr.responseText.slice(0, 300)) || xhr.statusText;
+                            status.textContent = ' GCS ' + xhr.status + (err ? ' ' + err : '');
+                            reject(new Error(xhr.statusText));
+                        }
+                    };
+                    xhr.onerror = () => { status.textContent = ' GCS network/CORS'; reject(new Error('network')); };
+                    xhr.send(file);
+                });
+
+                const completeRes = await fetch('@Url.Action("Complete", "Upload")', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        restaurantId: rid,
+                        menuId: mid,
+                        objectName: objectName,
+                        fileName: file.name,
+                        restaurantName: rname,
+                        menuTitle: mtitle
+                    })
+                });
+                if (!completeRes.ok) {
+                    const t = await completeRes.text();
+                    status.textContent = ' GCS ok; complete ' + completeRes.status + (t ? ' ' + t.slice(0, 200) : '');
+                    continue;
+                }
+                status.textContent = ' done';
+            } catch (e) {
+                if (!status.textContent.trim())
+                    status.textContent = ' ' + (e && e.message ? e.message : String(e));
+            }
         }
     });
 })();
