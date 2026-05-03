@@ -2,7 +2,6 @@ C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\appsettings.Developmen
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\appsettings.json
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.staticwebassets.runtime.json
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.staticwebassets.endpoints.json
-C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.exe
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.deps.json
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.runtimeconfig.json
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.dll
@@ -59,3 +58,4 @@ C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\ref\PFC.Web.dll
 C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\PFC.Web.sourcelink.json
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.Iam.V1.dll
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.PubSub.V1.dll
+c:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.exe

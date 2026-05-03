@@ -54,6 +54,10 @@ builder.Services.AddSingleton(sp =>
 
 builder.Services.AddSingleton<MenuUploadNotificationService>();
 
+builder.Services.AddMemoryCache();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<TranslationProxyService>();
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
