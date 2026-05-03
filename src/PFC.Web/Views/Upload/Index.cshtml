@@ -1,0 +1,78 @@
+@{
+    ViewData["Title"] = "Upload menus";
+}
+
+<h1>Upload menus</h1>
+
+<p class="text-muted">Files upload straight to your bucket; progress is per file.</p>
+
+<input type="file" id="files" multiple accept="image/*" class="form-control mb-3" />
+<button type="button" id="start" class="btn btn-primary" disabled>Upload</button>
+
+<ul id="progressList" class="list-unstyled mt-3"></ul>
+
+@section Scripts {
+<script>
+(function () {
+    const input = document.getElementById('files');
+    const start = document.getElementById('start');
+    const progressList = document.getElementById('progressList');
+
+    input.addEventListener('change', () => {
+        start.disabled = !input.files.length;
+    });
+
+    start.addEventListener('click', async () => {
+        progressList.innerHTML = '';
+        const files = Array.from(input.files || []);
+        for (const file of files) {
+            const li = document.createElement('li');
+            li.className = 'mb-2';
+            const label = document.createElement('div');
+            label.textContent = file.name + ' — ';
+            const bar = document.createElement('progress');
+            bar.max = 100;
+            bar.value = 0;
+            const status = document.createElement('span');
+            label.appendChild(bar);
+            label.appendChild(status);
+            li.appendChild(label);
+            progressList.appendChild(li);
+
+            const signRes = await fetch('@Url.Action("Sign", "Upload")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fileName: file.name, contentType: file.type || 'application/octet-stream' })
+            });
+            if (!signRes.ok) {
+                status.textContent = ' failed (sign)';
+                continue;
+            }
+            const { uploadUrl } = await signRes.json();
+
+            await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('PUT', uploadUrl);
+                xhr.setRequestHeader('Content-Type', file.type || 'application/octet-stream');
+                xhr.upload.onprogress = (e) => {
+                    if (e.lengthComputable)
+                        bar.value = Math.round((e.loaded / e.total) * 100);
+                };
+                xhr.onload = () => {
+                    if (xhr.status >= 200 && xhr.status < 300) {
+                        bar.value = 100;
+                        status.textContent = ' done';
+                        resolve();
+                    } else {
+                        status.textContent = ' failed (' + xhr.status + ')';
+                        reject(new Error(xhr.statusText));
+                    }
+                };
+                xhr.onerror = () => { status.textContent = ' network error'; reject(new Error('network')); };
+                xhr.send(file);
+            }).catch(() => {});
+        }
+    });
+})();
+</script>
+}
