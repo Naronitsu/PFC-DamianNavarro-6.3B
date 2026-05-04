@@ -1,15 +1,63 @@
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
 using Google.Cloud.PubSub.V1;
+using Google.Cloud.SecretManager.V1;
 using Google.Cloud.Storage.V1;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using PFC.Web.Configuration;
+using PFC.Web.Filters;
 using PFC.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services
     .Configure<GcpOptions>(builder.Configuration.GetSection(GcpOptions.SectionName));
+
+var gcpSnap = builder.Configuration.GetSection(GcpOptions.SectionName).Get<GcpOptions>() ?? new GcpOptions();
+
+string googleClientSecret = "";
+if (gcpSnap.OAuthConfigured)
+{
+    var sm = SecretManagerServiceClient.Create();
+    var vn = new SecretVersionName(gcpSnap.ProjectId, gcpSnap.OAuthClientSecretSecretId, "latest");
+    var sv = await sm.AccessSecretVersionAsync(vn).ConfigureAwait(false);
+    googleClientSecret = sv.Payload.Data.ToStringUtf8().Trim();
+    if (string.IsNullOrWhiteSpace(googleClientSecret))
+        throw new InvalidOperationException(
+            "OAuth client secret from Secret Manager was empty. Check the secret value and Gcp:OAuthClientSecretSecretId.");
+}
+
+var oauthReady = gcpSnap.OAuthConfigured && !string.IsNullOrWhiteSpace(googleClientSecret);
+
+var authBuilder = builder.Services.AddAuthentication(options =>
+{
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = oauthReady
+        ? GoogleDefaults.AuthenticationScheme
+        : CookieAuthenticationDefaults.AuthenticationScheme;
+});
+
+authBuilder.AddCookie(o =>
+{
+    o.LoginPath = "/Account/Login";
+});
+
+if (oauthReady)
+{
+    authBuilder.AddGoogle(options =>
+    {
+        options.ClientId = gcpSnap.OAuthGoogleClientId;
+        options.ClientSecret = googleClientSecret;
+        options.CallbackPath = "/signin-google";
+        options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    });
+}
+
+builder.Services.AddAuthorization();
+builder.Services.AddScoped<RequireGoogleForUploadFilter>();
 
 builder.Services.AddSingleton(sp =>
 {
@@ -48,7 +96,7 @@ builder.Services.AddSingleton(sp =>
     var topicId = string.IsNullOrWhiteSpace(gcp.MenuUploadsPubSubTopic)
         ? "menu-uploads-topic"
         : gcp.MenuUploadsPubSubTopic;
-    var topicName = TopicName.FromProjectTopic(gcp.ProjectId, topicId);
+    var topicName = Google.Cloud.PubSub.V1.TopicName.FromProjectTopic(gcp.ProjectId, topicId);
     return PublisherClient.Create(topicName);
 });
 
@@ -73,6 +121,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

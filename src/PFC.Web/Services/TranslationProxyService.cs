@@ -56,7 +56,9 @@ public sealed class TranslationProxyService
             ? new DateTimeOffset(DateTime.SpecifyKind(ts.Value.ToDateTime(), DateTimeKind.Utc))
             : DateTimeOffset.MinValue;
 
-        var cacheKey = BuildCacheKey(restaurantId, menuId, updatedAt, targetLanguage, text);
+        var epoch = menuSnap.ContainsField("translationEpoch") ? menuSnap.GetValue<long>("translationEpoch") : 0L;
+
+        var cacheKey = BuildCacheKey(restaurantId, menuId, updatedAt, epoch, targetLanguage, text);
         if (_cache.TryGetValue(cacheKey, out string? cached) && cached is not null)
             return cached;
 
@@ -91,10 +93,11 @@ public sealed class TranslationProxyService
         string restaurantId,
         string menuId,
         DateTimeOffset menuUpdatedAt,
+        long translationEpoch,
         string targetLanguage,
         string text)
     {
-        var raw = $"{restaurantId}|{menuId}|{menuUpdatedAt.UtcTicks}|{targetLanguage}|{text}";
+        var raw = $"{restaurantId}|{menuId}|{menuUpdatedAt.UtcTicks}|{translationEpoch}|{targetLanguage}|{text}";
         var hash = Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(raw)));
         return $"tr:{hash}";
     }

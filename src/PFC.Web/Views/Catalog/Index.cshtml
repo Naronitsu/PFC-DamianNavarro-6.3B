@@ -1,28 +1,54 @@
-@model List<PFC.Web.ViewModels.CatalogMenuRow>
+@model List<PFC.Web.ViewModels.CatalogDishRow>
 @{
     ViewData["Title"] = "Catalog";
+    var includePending = ViewBag.IncludePending as bool? ?? false;
+    var query = ViewBag.Query as string ?? "";
+    var sort = ViewBag.Sort as string ?? "price_asc";
 }
 
-<h1>Menus</h1>
+<h1>Dishes</h1>
 
-@if (ViewBag.IncludePending as bool? == true)
+@if (includePending)
 {
-    <p class="text-muted">Including pending restaurants (dev).</p>
+    <p class="text-muted">Including pending restaurants (structured items only).</p>
 }
 else
 {
-    <p class="text-muted">Showing ready/confirmed only. Use <strong>Toggle pending</strong> or <code>?includePending=true</code> for pending OCR menus.</p>
+    <p class="text-muted">Ready/confirmed menus with structured items.</p>
 }
 
-<p>
-    <a class="btn btn-outline-secondary btn-sm" href="@Url.Action("Index", new { includePending = !(ViewBag.IncludePending as bool? ?? false) })">
-        Toggle pending
-    </a>
-</p>
+<form method="get" class="row g-2 align-items-end mb-3">
+    <input type="hidden" name="includePending" value="@(includePending ? "true" : "false")" />
+    <div class="col-md-4">
+        <label class="form-label" for="q">Search</label>
+        <input type="search" class="form-control" id="q" name="q" value="@query" placeholder="dish or restaurant" />
+    </div>
+    <div class="col-md-3">
+        <label class="form-label" for="sort">Sort by price</label>
+        <select class="form-select" id="sort" name="sort">
+            @if (sort == "price_desc")
+            {
+                <option value="price_asc">Low to high</option>
+                <option value="price_desc" selected>High to low</option>
+            }
+            else
+            {
+                <option value="price_asc" selected>Low to high</option>
+                <option value="price_desc">High to low</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-auto">
+        <button type="submit" class="btn btn-primary">Apply</button>
+    </div>
+    <div class="col-md-auto">
+        <a class="btn btn-outline-secondary" href="@Url.Action("Index", new { q = query, sort, includePending = !includePending })">Toggle pending</a>
+    </div>
+</form>
 
 @if (Model.Count == 0)
 {
-    <p>No menus to show yet.</p>
+    <p>No dishes to show. Upload menus, run the processor, then search again.</p>
 }
 else
 {
@@ -31,8 +57,8 @@ else
             <tr>
                 <th>Restaurant</th>
                 <th>Menu</th>
-                <th>Status</th>
-                <th>Preview</th>
+                <th>Dish</th>
+                <th>Price</th>
                 <th>Translate</th>
             </tr>
         </thead>
@@ -42,21 +68,28 @@ else
             <tr>
                 <td data-rid="@row.RestaurantId">@row.RestaurantName</td>
                 <td data-mid="@row.MenuId">@row.MenuTitle</td>
-                <td>@row.RestaurantStatus</td>
-                <td style="max-width:320px;white-space:pre-wrap;font-size:0.85rem;">@(row.OcrText.Length > 400 ? row.OcrText.Substring(0, 400) + "…" : row.OcrText)</td>
+                <td>@row.ItemName</td>
+                <td>@row.Price.ToString("0.##") @row.Currency</td>
                 <td>
-                    <textarea class="d-none ocr-full">@row.OcrText</textarea>
-                    <div class="input-group input-group-sm">
-                        <select class="form-select lang-select" style="max-width:110px">
-                            <option value="fr">French</option>
-                            <option value="de">German</option>
-                            <option value="mt">Maltese</option>
-                            <option value="it">Italian</option>
-                            <option value="es">Spanish</option>
-                        </select>
-                        <button type="button" class="btn btn-primary tr-btn">Go</button>
-                    </div>
-                    <div class="small text-muted tr-out mt-1"></div>
+                    <textarea class="d-none tr-source">@row.TranslateLine</textarea>
+                    @if (row.CanTranslate)
+                    {
+                        <div class="input-group input-group-sm">
+                            <select class="form-select lang-select" style="max-width:110px">
+                                <option value="fr">French</option>
+                                <option value="de">German</option>
+                                <option value="mt">Maltese</option>
+                                <option value="it">Italian</option>
+                                <option value="es">Spanish</option>
+                            </select>
+                            <button type="button" class="btn btn-primary tr-btn">Go</button>
+                        </div>
+                        <div class="small text-muted tr-out mt-1"></div>
+                    }
+                    else
+                    {
+                        <span class="text-muted small">When ready</span>
+                    }
                 </td>
             </tr>
         }
@@ -69,7 +102,7 @@ else
 document.querySelectorAll('.tr-btn').forEach(btn => {
     btn.addEventListener('click', async () => {
         const cell = btn.closest('td');
-        const text = cell.querySelector('.ocr-full').value;
+        const text = cell.querySelector('.tr-source').value;
         const lang = cell.querySelector('.lang-select').value;
         const out = cell.querySelector('.tr-out');
         const row = btn.closest('tr');

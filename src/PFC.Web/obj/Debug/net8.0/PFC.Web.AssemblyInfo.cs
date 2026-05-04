@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PFC.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+b257558ced2f89cf4e14c16663d7ec4485e89fb0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7a0db1bf8826241986a2f68a4c9cb12dcd928893")]
 [assembly: System.Reflection.AssemblyProductAttribute("PFC.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PFC.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

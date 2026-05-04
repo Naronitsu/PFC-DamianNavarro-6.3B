@@ -1,0 +1,52 @@
+PFC.MenuProcessorFunction — deploy (Gen2) and Cloud Scheduler (KU3.1)
+
+Replace PROJECT, REGION, DB if needed.
+
+Prereq: enable Scheduler API once per project:
+  gcloud services enable cloudscheduler.googleapis.com --project=YOUR_PROJECT_ID
+
+Windows: use curl.exe (not curl) so you do not hit PowerShell’s Invoke-WebRequest alias.
+
+1) Deploy function (from repo root, after dotnet publish if you package manually — or use --source)
+
+  gcloud functions deploy pfc-menu-processor ^
+    --gen2 ^
+    --region=europe-west1 ^
+    --runtime=dotnet8 ^
+    --source=src/PFC.MenuProcessorFunction ^
+    --entry-point=PFC.MenuProcessorFunction.Function ^
+    --trigger-http ^
+    --set-env-vars=GOOGLE_CLOUD_PROJECT=programming-for-cloud-486909,FIRESTORE_DATABASE_ID=damian-pfc-firestore
+
+Optional: require a shared secret header (Scheduler sends the same header):
+
+  --set-env-vars=GOOGLE_CLOUD_PROJECT=...,FIRESTORE_DATABASE_ID=...,PROCESSOR_SHARED_SECRET=YOUR_RANDOM_SECRET
+
+Optional: final restaurant status (default ready):
+
+  RESTAURANT_DONE_STATUS=confirmed
+
+2) Allow Scheduler to invoke (if not using --allow-unauthenticated)
+
+Grant the Scheduler service account roles/run.invoker on the Cloud Run service backing the function, or use OIDC as below.
+
+3) Hourly Cloud Scheduler job (HTTP POST + optional header secret)
+
+  gcloud scheduler jobs create http pfc-menu-processor-hourly ^
+    --location=europe-west1 ^
+    --schedule="0 * * * *" ^
+    --uri="https://europe-west1-PROJECT_ID.cloudfunctions.net/pfc-menu-processor" ^
+    --http-method=POST ^
+    --headers="X-Pfc-Processor-Secret=YOUR_RANDOM_SECRET"
+
+If PROCESSOR_SHARED_SECRET is unset, omit --headers and use OIDC + invoker instead:
+
+  --oidc-service-account-email=SCHEDULER_SA@PROJECT_ID.iam.gserviceaccount.com ^
+  --oidc-token-audience="https://europe-west1-PROJECT_ID.cloudfunctions.net/pfc-menu-processor"
+
+4) What it does
+
+  - Queries restaurants with status "pending"
+  - For each menu with ocrText, parses lines into items [{ name, price, currency }]
+  - Merges items onto the menu document
+  - Sets restaurant status to ready (or RESTAURANT_DONE_STATUS)

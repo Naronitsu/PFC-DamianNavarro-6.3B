@@ -10,7 +10,9 @@
         "dependencies": {
           "Google.Cloud.Firestore": "4.2.0",
           "Google.Cloud.PubSub.V1": "3.33.0",
-          "Google.Cloud.Storage.V1": "4.14.0"
+          "Google.Cloud.SecretManager.V1": "2.5.0",
+          "Google.Cloud.Storage.V1": "4.14.0",
+          "Microsoft.AspNetCore.Authentication.Google": "8.0.11"
         },
         "runtime": {
           "PFC.Web.dll": {}
@@ -178,6 +180,19 @@
           }
         }
       },
+      "Google.Cloud.SecretManager.V1/2.5.0": {
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "4.13.1",
+          "Google.Cloud.Iam.V1": "3.5.0",
+          "Google.Cloud.Location": "2.4.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Cloud.SecretManager.V1.dll": {
+            "assemblyVersion": "2.5.0.0",
+            "fileVersion": "2.5.0.0"
+          }
+        }
+      },
       "Google.Cloud.Storage.V1/4.14.0": {
         "dependencies": {
           "Google.Api.Gax.Rest": "4.12.1",
@@ -249,6 +264,14 @@
           "lib/net8.0/Grpc.Net.Common.dll": {
             "assemblyVersion": "2.0.0.0",
             "fileVersion": "2.71.0.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/8.0.11": {
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "8.0.11.0",
+            "fileVersion": "8.0.1124.52116"
           }
         }
       },
@@ -406,6 +429,13 @@
       "path": "google.cloud.pubsub.v1/3.33.0",
       "hashPath": "google.cloud.pubsub.v1.3.33.0.nupkg.sha512"
     },
+    "Google.Cloud.SecretManager.V1/2.5.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-RumyUDQrGa0Sm1e8iYofnPmU+zNjJI/gAhb7jN33D4PNDmNv76sJEN5ea71V54T4L+6sMhUtehXnAH6DWhQucA==",
+      "path": "google.cloud.secretmanager.v1/2.5.0",
+      "hashPath": "google.cloud.secretmanager.v1.2.5.0.nupkg.sha512"
+    },
     "Google.Cloud.Storage.V1/4.14.0": {
       "type": "package",
       "serviceable": true,
@@ -454,6 +484,13 @@
       "sha512": "sha512-v0c8R97TwRYwNXlC8GyRXwYTCNufpDfUtj9la+wUrZFzVWkFJuNAltU+c0yI3zu0jl54k7en6u2WKgZgd57r2Q==",
       "path": "grpc.net.common/2.71.0",
       "hashPath": "grpc.net.common.2.71.0.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Google/8.0.11": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-XYjmQF9ggDnpXds7aH5CgW2SWVmubJ/F6NOnDwDseMYnEBZSwhstkY9qZszd6wsAhpW1HeT9yO9nZqFPRMiDAA==",
+      "path": "microsoft.aspnetcore.authentication.google/8.0.11",
+      "hashPath": "microsoft.aspnetcore.authentication.google.8.0.11.nupkg.sha512"
     },
     "Microsoft.Bcl.AsyncInterfaces/10.0.3": {
       "type": "package",

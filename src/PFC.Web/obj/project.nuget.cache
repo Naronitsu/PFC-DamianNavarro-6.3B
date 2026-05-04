@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lgm3vkmX+kU=",
+  "dgSpecHash": "XgqjeywPUjU=",
   "success": true,
-  "projectFilePath": "c:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\PFC.Web.csproj",
+  "projectFilePath": "C:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\PFC.Web.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\brama\\.nuget\\packages\\google.api.commonprotos\\2.17.0\\google.api.commonprotos.2.17.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\google.api.gax\\4.13.1\\google.api.gax.4.13.1.nupkg.sha512",
@@ -17,6 +17,7 @@
     "C:\\Users\\brama\\.nuget\\packages\\google.cloud.iam.v1\\3.5.0\\google.cloud.iam.v1.3.5.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\google.cloud.location\\2.4.0\\google.cloud.location.2.4.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\google.cloud.pubsub.v1\\3.33.0\\google.cloud.pubsub.v1.3.33.0.nupkg.sha512",
+    "C:\\Users\\brama\\.nuget\\packages\\google.cloud.secretmanager.v1\\2.5.0\\google.cloud.secretmanager.v1.2.5.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\google.cloud.storage.v1\\4.14.0\\google.cloud.storage.v1.4.14.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\google.longrunning\\3.5.0\\google.longrunning.3.5.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\google.protobuf\\3.31.1\\google.protobuf.3.31.1.nupkg.sha512",
@@ -24,6 +25,7 @@
     "C:\\Users\\brama\\.nuget\\packages\\grpc.core.api\\2.71.0\\grpc.core.api.2.71.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\grpc.net.client\\2.71.0\\grpc.net.client.2.71.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\grpc.net.common\\2.71.0\\grpc.net.common.2.71.0.nupkg.sha512",
+    "C:\\Users\\brama\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\8.0.11\\microsoft.aspnetcore.authentication.google.8.0.11.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\10.0.3\\microsoft.bcl.asyncinterfaces.10.0.3.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\6.0.0\\microsoft.extensions.dependencyinjection.abstractions.6.0.0.nupkg.sha512",
     "C:\\Users\\brama\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\6.0.0\\microsoft.extensions.logging.abstractions.6.0.0.nupkg.sha512",

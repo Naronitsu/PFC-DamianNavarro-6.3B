@@ -44,6 +44,7 @@ public sealed class MenuUploadNotificationService
         {
             ["title"] = menuTitle,
             ["updatedAt"] = FieldValue.ServerTimestamp,
+            ["translationEpoch"] = FieldValue.Increment(1L),
         }, SetOptions.MergeAll, cancellationToken).ConfigureAwait(false);
 
         var imageRef = menuRef.Collection("images").Document(imageId);

@@ -4,7 +4,7 @@
 
 <h1>Upload menus</h1>
 
-<p class="text-muted">Files upload straight to your bucket; progress is per file.</p>
+<p class="text-muted">Direct to bucket; per-file progress. After a successful file, new restaurant and menu IDs apply for the next upload.</p>
 
 <input type="hidden" id="restaurantId" value="@ViewBag.RestaurantId" />
 <input type="hidden" id="menuId" value="@ViewBag.MenuId" />
@@ -31,6 +31,14 @@
     const input = document.getElementById('files');
     const start = document.getElementById('start');
     const progressList = document.getElementById('progressList');
+    const restaurantIdInput = document.getElementById('restaurantId');
+    const menuIdInput = document.getElementById('menuId');
+
+    function newId32() {
+        const a = new Uint8Array(16);
+        crypto.getRandomValues(a);
+        return Array.from(a, b => b.toString(16).padStart(2, '0')).join('');
+    }
 
     input.addEventListener('change', () => {
         start.disabled = !input.files.length;
@@ -39,8 +47,9 @@
     start.addEventListener('click', async () => {
         progressList.innerHTML = '';
         const files = Array.from(input.files || []);
-        const rid = document.getElementById('restaurantId').value;
-        const mid = document.getElementById('menuId').value;
+        let anyCompleteOk = false;
+        const rid = restaurantIdInput.value;
+        const mid = menuIdInput.value;
         const rname = document.getElementById('restaurantName').value || 'Restaurant';
         const mtitle = document.getElementById('menuTitle').value || 'Menu';
 
@@ -123,10 +132,16 @@
                     continue;
                 }
                 status.textContent = ' done';
+                anyCompleteOk = true;
             } catch (e) {
                 if (!status.textContent.trim())
                     status.textContent = ' ' + (e && e.message ? e.message : String(e));
             }
+        }
+
+        if (anyCompleteOk) {
+            restaurantIdInput.value = newId32();
+            menuIdInput.value = newId32();
         }
     });
 })();

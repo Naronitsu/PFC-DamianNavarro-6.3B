@@ -232,6 +232,24 @@
           }
         }
       },
+      "Google.Cloud.SecretManager.V1/2.5.0": {
+        "type": "package",
+        "dependencies": {
+          "Google.Api.Gax.Grpc": "[4.8.0, 5.0.0)",
+          "Google.Cloud.Iam.V1": "[3.2.0, 4.0.0)",
+          "Google.Cloud.Location": "[2.2.0, 3.0.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/Google.Cloud.SecretManager.V1.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Google.Cloud.SecretManager.V1.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Google.Cloud.Storage.V1/4.14.0": {
         "type": "package",
         "dependencies": {
@@ -340,6 +358,22 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "Microsoft.AspNetCore.Authentication.Google/8.0.11": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.Bcl.AsyncInterfaces/10.0.3": {
         "type": "package",
@@ -807,6 +841,25 @@
         "lib/netstandard2.0/Google.Cloud.PubSub.V1.xml"
       ]
     },
+    "Google.Cloud.SecretManager.V1/2.5.0": {
+      "sha512": "RumyUDQrGa0Sm1e8iYofnPmU+zNjJI/gAhb7jN33D4PNDmNv76sJEN5ea71V54T4L+6sMhUtehXnAH6DWhQucA==",
+      "type": "package",
+      "path": "google.cloud.secretmanager.v1/2.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "NuGetIcon.png",
+        "google.cloud.secretmanager.v1.2.5.0.nupkg.sha512",
+        "google.cloud.secretmanager.v1.nuspec",
+        "lib/net462/Google.Cloud.SecretManager.V1.dll",
+        "lib/net462/Google.Cloud.SecretManager.V1.pdb",
+        "lib/net462/Google.Cloud.SecretManager.V1.xml",
+        "lib/netstandard2.0/Google.Cloud.SecretManager.V1.dll",
+        "lib/netstandard2.0/Google.Cloud.SecretManager.V1.pdb",
+        "lib/netstandard2.0/Google.Cloud.SecretManager.V1.xml"
+      ]
+    },
     "Google.Cloud.Storage.V1/4.14.0": {
       "sha512": "CLoAz9BDzqGEXWKWPuUxlk8/wcabsONxCa3MEQzxhbEGoKT1TOT6KnWNl1IhrBGqNw7IWtR/Xg06XHS8JYF1qQ==",
       "type": "package",
@@ -965,6 +1018,21 @@
         "lib/netstandard2.1/Grpc.Net.Common.pdb",
         "lib/netstandard2.1/Grpc.Net.Common.xml",
         "packageIcon.png"
+      ]
+    },
+    "Microsoft.AspNetCore.Authentication.Google/8.0.11": {
+      "sha512": "XYjmQF9ggDnpXds7aH5CgW2SWVmubJ/F6NOnDwDseMYnEBZSwhstkY9qZszd6wsAhpW1HeT9yO9nZqFPRMiDAA==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.authentication.google/8.0.11",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.dll",
+        "lib/net8.0/Microsoft.AspNetCore.Authentication.Google.xml",
+        "microsoft.aspnetcore.authentication.google.8.0.11.nupkg.sha512",
+        "microsoft.aspnetcore.authentication.google.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/10.0.3": {
@@ -1241,7 +1309,9 @@
     "net8.0": [
       "Google.Cloud.Firestore >= 4.2.0",
       "Google.Cloud.PubSub.V1 >= 3.33.0",
-      "Google.Cloud.Storage.V1 >= 4.14.0"
+      "Google.Cloud.SecretManager.V1 >= 2.5.0",
+      "Google.Cloud.Storage.V1 >= 4.14.0",
+      "Microsoft.AspNetCore.Authentication.Google >= 8.0.11"
     ]
   },
   "packageFolders": {
@@ -1251,11 +1321,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\PFC.Web.csproj",
+      "projectUniqueName": "c:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\PFC.Web.csproj",
       "projectName": "PFC.Web",
-      "projectPath": "C:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\PFC.Web.csproj",
+      "projectPath": "c:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\PFC.Web.csproj",
       "packagesPath": "C:\\Users\\brama\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\obj\\",
+      "outputPath": "c:\\Users\\brama\\Documents\\PFC\\src\\PFC.Web\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -1302,9 +1372,17 @@
             "target": "Package",
             "version": "[3.33.0, )"
           },
+          "Google.Cloud.SecretManager.V1": {
+            "target": "Package",
+            "version": "[2.5.0, )"
+          },
           "Google.Cloud.Storage.V1": {
             "target": "Package",
             "version": "[4.14.0, )"
+          },
+          "Microsoft.AspNetCore.Authentication.Google": {
+            "target": "Package",
+            "version": "[8.0.11, )"
           }
         },
         "imports": [

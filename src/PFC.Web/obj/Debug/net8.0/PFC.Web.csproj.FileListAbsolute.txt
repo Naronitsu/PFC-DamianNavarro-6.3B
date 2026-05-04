@@ -58,4 +58,6 @@ C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\ref\PFC.Web.dll
 C:\Users\brama\Documents\PFC\src\PFC.Web\obj\Debug\net8.0\PFC.Web.sourcelink.json
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.Iam.V1.dll
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.PubSub.V1.dll
-c:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.exe
+c:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.SecretManager.V1.dll
+c:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.exe

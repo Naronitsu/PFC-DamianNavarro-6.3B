@@ -3,10 +3,12 @@ using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PFC.Web.Configuration;
+using PFC.Web.Filters;
 using PFC.Web.Services;
 
 namespace PFC.Web.Controllers;
 
+[ServiceFilter(typeof(RequireGoogleForUploadFilter))]
 public sealed class UploadController : Controller
 {
     private readonly UrlSigner _signer;

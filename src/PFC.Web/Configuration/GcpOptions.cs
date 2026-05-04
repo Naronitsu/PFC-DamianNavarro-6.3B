@@ -17,4 +17,12 @@ public class GcpOptions
     public string MenuUploadsPubSubTopic { get; set; } = "menu-uploads-topic";
 
     public string TranslateFunctionUrl { get; set; } = string.Empty;
+
+    public string OAuthGoogleClientId { get; set; } = string.Empty;
+
+    public string OAuthClientSecretSecretId { get; set; } = string.Empty;
+
+    public bool OAuthConfigured =>
+        !string.IsNullOrWhiteSpace(OAuthGoogleClientId)
+        && !string.IsNullOrWhiteSpace(OAuthClientSecretSecretId);
 }
