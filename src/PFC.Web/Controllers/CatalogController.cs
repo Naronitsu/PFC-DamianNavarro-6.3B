@@ -25,6 +25,7 @@ public sealed class CatalogController : Controller
         CancellationToken cancellationToken)
     {
         var dishes = new List<CatalogDishRow>();
+        var pendingMenus = new List<string>();
         var restaurants = await _db.Collection("restaurants").GetSnapshotAsync(cancellationToken).ConfigureAwait(false);
 
         foreach (var rdoc in restaurants.Documents)
@@ -44,10 +45,20 @@ public sealed class CatalogController : Controller
             foreach (var mdoc in menus.Documents)
             {
                 var items = ReadItems(mdoc);
+                var title = mdoc.ContainsField("title") ? mdoc.GetValue<string>("title") : "";
+                var hasOcr = mdoc.ContainsField("ocrText") && !string.IsNullOrWhiteSpace(mdoc.GetValue<string>("ocrText"));
+
+                if (includePending && items.Count == 0 && (status == "pending" || string.IsNullOrEmpty(status)))
+                {
+                    var pendingLabel = $"{name} - {(string.IsNullOrWhiteSpace(title) ? mdoc.Id : title)}";
+                    if (hasOcr)
+                        pendingLabel += " (awaiting structured parse)";
+                    pendingMenus.Add(pendingLabel);
+                }
+
                 if (items.Count == 0)
                     continue;
 
-                var title = mdoc.ContainsField("title") ? mdoc.GetValue<string>("title") : "";
                 var canTranslate = status == "ready" || status == "confirmed";
 
                 foreach (var it in items)
@@ -88,6 +99,7 @@ public sealed class CatalogController : Controller
         ViewBag.IncludePending = includePending;
         ViewBag.Query = q ?? "";
         ViewBag.Sort = string.IsNullOrWhiteSpace(sort) ? "price_asc" : sort;
+        ViewBag.PendingMenus = pendingMenus;
         return View(dishes);
     }
 

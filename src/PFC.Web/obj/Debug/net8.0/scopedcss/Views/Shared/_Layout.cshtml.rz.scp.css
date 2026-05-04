@@ -37,9 +37,8 @@ button.accept-policy[b-11iwo3jgn1] {
 }
 
 .footer[b-11iwo3jgn1] {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+  position: static;
+  width: auto;
+  white-space: normal;
+  line-height: 1.4;
 }

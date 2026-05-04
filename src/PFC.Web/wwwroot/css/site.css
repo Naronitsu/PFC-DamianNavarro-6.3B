@@ -18,5 +18,73 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  margin-bottom: 0;
+}
+
+.app-nav {
+  background: #0f172a;
+}
+
+.app-nav .nav-link {
+  color: #dbe2ef;
+}
+
+.app-nav .nav-link:hover {
+  color: #ffffff;
+}
+
+.page-container {
+  min-height: calc(100vh - 138px);
+}
+
+.panel-card {
+  background: #fff;
+  border-radius: 14px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+  padding: 1.25rem;
+}
+
+.hero-card {
+  background: linear-gradient(135deg, #0f172a 0%, #1d4ed8 100%);
+  color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 12px 26px rgba(15, 23, 42, 0.22);
+  padding: 1.5rem;
+}
+
+.hero-card .text-muted {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.feature-card {
+  background: #fff;
+  border: 1px solid #e6eaf0;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+  padding: 1rem;
+}
+
+.table {
+  --bs-table-bg: transparent;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table thead th {
+  background: #f4f7fb;
+  border-bottom-width: 1px;
+}
+
+.table tbody tr {
+  background: #fff;
+}
+
+.table tbody tr:hover {
+  background: #f8fbff;
+}
+
+.footer {
+  border-top: 1px solid #dbe2ef;
+  margin-top: 2rem;
+  padding: 1rem 0;
 }

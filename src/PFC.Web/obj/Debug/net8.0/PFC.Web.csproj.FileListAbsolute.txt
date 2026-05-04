@@ -60,4 +60,3 @@ C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.Iam.V1.dl
 C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.PubSub.V1.dll
 c:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Google.Cloud.SecretManager.V1.dll
 c:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.Google.dll
-C:\Users\brama\Documents\PFC\src\PFC.Web\bin\Debug\net8.0\PFC.Web.exe

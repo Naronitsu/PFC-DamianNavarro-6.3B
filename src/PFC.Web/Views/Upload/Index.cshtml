@@ -2,9 +2,13 @@
     ViewData["Title"] = "Upload menus";
 }
 
-<h1>Upload menus</h1>
-
-<p class="text-muted">Direct to bucket; per-file progress. After a successful file, new restaurant and menu IDs apply for the next upload.</p>
+<section class="panel-card">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start gap-2 mb-3">
+        <div>
+            <h1 class="h3 mb-1">Upload menus</h1>
+            <p class="text-muted mb-0">Direct upload to Cloud Storage with per-file progress and status.</p>
+        </div>
+    </div>
 
 <input type="hidden" id="restaurantId" value="@ViewBag.RestaurantId" />
 <input type="hidden" id="menuId" value="@ViewBag.MenuId" />
@@ -21,9 +25,10 @@
 </div>
 
 <input type="file" id="files" multiple accept="image/*" class="form-control mb-3" />
-<button type="button" id="start" class="btn btn-primary" disabled>Upload</button>
+<button type="button" id="start" class="btn btn-primary" disabled>Start upload</button>
 
-<ul id="progressList" class="list-unstyled mt-3"></ul>
+<ul id="progressList" class="list-unstyled mt-3 mb-0"></ul>
+</section>
 
 @section Scripts {
 <script>

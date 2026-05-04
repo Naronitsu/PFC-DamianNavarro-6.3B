@@ -22,7 +22,10 @@ public class GcpOptions
 
     public string OAuthClientSecretSecretId { get; set; } = string.Empty;
 
+    public string OAuthGoogleClientSecret { get; set; } = string.Empty;
+
     public bool OAuthConfigured =>
         !string.IsNullOrWhiteSpace(OAuthGoogleClientId)
-        && !string.IsNullOrWhiteSpace(OAuthClientSecretSecretId);
+        && (!string.IsNullOrWhiteSpace(OAuthGoogleClientSecret)
+            || !string.IsNullOrWhiteSpace(OAuthClientSecretSecretId));
 }

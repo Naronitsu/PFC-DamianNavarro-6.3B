@@ -1,8 +1,40 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "PFC Menu Cloud";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero-card mb-4">
+    <div class="d-flex flex-column flex-lg-row justify-content-between gap-4 align-items-start">
+        <div>
+            <p class="text-uppercase text-muted small mb-2">Programming for the Cloud</p>
+            <h1 class="display-6 fw-semibold mb-3">Restaurant menus from image to searchable catalog</h1>
+            <p class="lead text-muted mb-0">
+                Upload menu images, process OCR with cloud functions, then search and translate structured dishes.
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a class="btn btn-primary" asp-controller="Upload" asp-action="Index">Upload menus</a>
+            <a class="btn btn-outline-secondary" asp-controller="Catalog" asp-action="Index">Open catalog</a>
+        </div>
+    </div>
+</section>
+
+<section class="row g-3">
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <h2 class="h5">1. Upload</h2>
+            <p class="mb-0 text-muted">Direct signed upload to Cloud Storage with per-file progress and status feedback.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <h2 class="h5">2. Process</h2>
+            <p class="mb-0 text-muted">Pub/Sub and cloud functions run OCR and convert pending menus into structured dish items.</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="feature-card h-100">
+            <h2 class="h5">3. Explore</h2>
+            <p class="mb-0 text-muted">Catalog supports search, price sorting, and cached translation of ready menu entries.</p>
+        </div>
+    </div>
+</section>

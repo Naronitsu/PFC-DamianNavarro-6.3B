@@ -5,10 +5,13 @@ using Google.Cloud.SecretManager.V1;
 using Google.Cloud.Storage.V1;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using PFC.Web.Configuration;
 using PFC.Web.Filters;
 using PFC.Web.Services;
+
+AppContext.SetSwitch("System.Net.SocketsHttpHandler.Http3Support", false);
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,10 +23,14 @@ var gcpSnap = builder.Configuration.GetSection(GcpOptions.SectionName).Get<GcpOp
 string googleClientSecret = "";
 if (gcpSnap.OAuthConfigured)
 {
-    var sm = SecretManagerServiceClient.Create();
-    var vn = new SecretVersionName(gcpSnap.ProjectId, gcpSnap.OAuthClientSecretSecretId, "latest");
-    var sv = await sm.AccessSecretVersionAsync(vn).ConfigureAwait(false);
-    googleClientSecret = sv.Payload.Data.ToStringUtf8().Trim();
+    googleClientSecret = gcpSnap.OAuthGoogleClientSecret?.Trim() ?? "";
+    if (string.IsNullOrWhiteSpace(googleClientSecret))
+    {
+        var sm = SecretManagerServiceClient.Create();
+        var vn = new SecretVersionName(gcpSnap.ProjectId, gcpSnap.OAuthClientSecretSecretId, "latest");
+        var sv = await sm.AccessSecretVersionAsync(vn).ConfigureAwait(false);
+        googleClientSecret = sv.Payload.Data.ToStringUtf8().Trim();
+    }
     if (string.IsNullOrWhiteSpace(googleClientSecret))
         throw new InvalidOperationException(
             "OAuth client secret from Secret Manager was empty. Check the secret value and Gcp:OAuthClientSecretSecretId.");
@@ -79,7 +86,7 @@ builder.Services.AddSingleton(_ => StorageClient.Create());
 builder.Services.AddSingleton(sp =>
 {
     var gcp = sp.GetRequiredService<IOptions<GcpOptions>>().Value;
-    if (!string.IsNullOrWhiteSpace(gcp.SigningCredentialPath))
+    if (!string.IsNullOrWhiteSpace(gcp.SigningCredentialPath) && File.Exists(gcp.SigningCredentialPath))
         return UrlSigner.FromCredential(CredentialFactory.FromFile<ServiceAccountCredential>(gcp.SigningCredentialPath));
 
     var adc = GoogleCredential.GetApplicationDefault();
@@ -109,6 +116,14 @@ builder.Services.AddScoped<TranslationProxyService>();
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+var forwardedHeadersOptions = new ForwardedHeadersOptions
+{
+    ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+};
+forwardedHeadersOptions.KnownNetworks.Clear();
+forwardedHeadersOptions.KnownProxies.Clear();
+app.UseForwardedHeaders(forwardedHeadersOptions);
 
 if (!app.Environment.IsDevelopment())
 {
