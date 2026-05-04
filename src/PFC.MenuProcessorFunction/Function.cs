@@ -72,6 +72,7 @@ public sealed class Function : IHttpFunction
 
         var restaurantsProcessed = 0;
         var menusUpdated = 0;
+        var historyEntriesWritten = 0;
 
         foreach (var rdoc in pendingSnap.Documents)
         {
@@ -95,6 +96,26 @@ public sealed class Function : IHttpFunction
                     ["price"] = p.Price,
                     ["currency"] = p.Currency,
                 }).ToList();
+
+                var previousItems = ReadItems(mdoc);
+                var previousItemsJson = JsonSerializer.Serialize(previousItems);
+                var newItemsJson = JsonSerializer.Serialize(items);
+
+                if (previousItems.Count > 0 && previousItemsJson != newItemsJson)
+                {
+                    var historyRef = mdoc.Reference.Collection("history").Document(Guid.NewGuid().ToString("N"));
+                    await historyRef.SetAsync(
+                        new Dictionary<string, object>
+                        {
+                            ["capturedAt"] = FieldValue.ServerTimestamp,
+                            ["source"] = "menu-processor",
+                            ["previousItems"] = previousItems,
+                            ["previousOcrText"] = ocr,
+                        },
+                        SetOptions.MergeAll,
+                        context.RequestAborted).ConfigureAwait(false);
+                    historyEntriesWritten++;
+                }
 
                 await mdoc.Reference.SetAsync(
                     new Dictionary<string, object>
@@ -130,9 +151,25 @@ public sealed class Function : IHttpFunction
             {
                 restaurantsProcessed,
                 menusUpdated,
+                historyEntriesWritten,
                 doneStatus,
             }),
             context.RequestAborted).ConfigureAwait(false);
+    }
+
+    private static List<Dictionary<string, object>> ReadItems(DocumentSnapshot snapshot)
+    {
+        if (!snapshot.ContainsField("items"))
+            return new List<Dictionary<string, object>>();
+
+        try
+        {
+            return snapshot.GetValue<List<Dictionary<string, object>>>("items");
+        }
+        catch
+        {
+            return new List<Dictionary<string, object>>();
+        }
     }
 
     private static async Task<string?> TryProjectIdFromMetadataAsync(CancellationToken cancellationToken)
