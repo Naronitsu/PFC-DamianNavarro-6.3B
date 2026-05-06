@@ -44,6 +44,10 @@ public sealed class CatalogController : Controller
             var menus = await rdoc.Reference.Collection("menus").GetSnapshotAsync(cancellationToken).ConfigureAwait(false);
             foreach (var mdoc in menus.Documents)
             {
+                var isActive = !mdoc.ContainsField("isActive") || mdoc.GetValue<bool>("isActive");
+                if (!isActive)
+                    continue;
+
                 var items = ReadItems(mdoc);
                 var title = mdoc.ContainsField("title") ? mdoc.GetValue<string>("title") : "";
                 var hasOcr = mdoc.ContainsField("ocrText") && !string.IsNullOrWhiteSpace(mdoc.GetValue<string>("ocrText"));
