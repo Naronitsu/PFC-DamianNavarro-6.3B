@@ -6,6 +6,10 @@ Cloud-based web application for the ITSFT-606-1620 Programming for the Cloud ass
 
 - [https://pfc-web-721810082985.europe-west1.run.app](https://pfc-web-721810082985.europe-west1.run.app)
 
+## Sample Menus
+
+- https://drive.google.com/drive/folders/1nHf-ckIBgapaU6U_o8GNm8ov5o17nPHd?usp=sharing
+
 ## Project Summary
 
 The system lets authenticated users upload restaurant menu images, stores them in Google Cloud Storage, and tracks references in Firestore using a hierarchical model:
